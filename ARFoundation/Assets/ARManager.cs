@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.XR.ARFoundation;  // 引用 Foundation API
+using UnityEngine.XR.ARSubsystems;  // 引用 Subsystems API
 using System.Collections.Generic;   // 引用 系統.集合.一般 包含清單 List
 
 /// <summary>
@@ -28,10 +29,16 @@ public class ARManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             pointMouse = Input.mousePosition;           // 滑鼠座標 = 玩家的滑鼠座標
-            print(pointMouse);                          // 輸出座標測試用
+
+            // 判斷射線是否打到物件
+            if (arManager.Raycast(pointMouse, hits, TrackableType.PlaneWithinPolygon))
+            {
+                // 生成物件(物件，座標，角度)
+                // hits[0].pose.position 點擊到地面的第一個位置
+                // Quaternion.identity 零角度
+                Instantiate(obj, hits[0].pose.position, Quaternion.identity);
+            }
         }
-        // 判斷射線是否打到物件
-        // 生成物件
     }
 
     private void Update()
